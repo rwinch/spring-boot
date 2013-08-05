@@ -158,10 +158,10 @@ _See [spring-boot-actuator/README.md](spring-boot-actuator/README.html)._
 Spring Boot Loader provides the secret sauce that allows you to build a single jar file 
 that can be launched using `java -jar`. Generally you will not need to use 
 `spring-boot-loader`  directly but instead work with the 
-[Gradle](spring-boot-gradle-plugin/README.html) or 
-[Maven](spring-boot-maven-plugin/README.html) plugin.
+[Gradle](spring-boot-tools/spring-boot-gradle-plugin/README.html) or 
+[Maven](spring-boot-tools/spring-boot-maven-plugin/README.html) plugin.
 
-_See [spring-boot-loader/README.md](spring-boot-loader/README.html)._
+_See [spring-boot-loader/README.md](spring-boot-tools/spring-boot-loader/README.html)._
 
 
 ## Samples
