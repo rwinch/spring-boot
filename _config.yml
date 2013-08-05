@@ -1,7 +1,7 @@
 safe: true
 lsi: false
 pygments: true
-# Set this to empty string (--baseurl) to render locally
-baseurl: /spring-zero
+github: https://github.com/SpringSource/spring-boot
+markdown: redcarpet
 project:
-  version: 0.5.0
+  version: 0.5.0.BUILD-SNAPSHOT

@@ -2,6 +2,11 @@
 .#*
 *~
 _site/
+target/
+.springBeans
+.gradle/
 .classpath
 .project
 .settings/
+dependency-reduced-pom.xml
+spring-zero-samples/
