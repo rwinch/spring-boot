@@ -117,6 +117,7 @@
 		<spring-social-twitter.version>1.1.0.RELEASE</spring-social-twitter.version>
 		<spring-social-linkedin.version>1.0.1.RELEASE</spring-social-linkedin.version>
 		<spring-security.version>3.2.5.RELEASE</spring-security.version>
+		<spring-security-oauth2.version>2.0.3.RELEASE</spring-security-oauth2.version>
 		<spring-security-jwt.version>1.0.2.RELEASE</spring-security-jwt.version>
 		<spring-ws.version>2.2.0.RELEASE</spring-ws.version>
 		<thymeleaf.version>2.1.3.RELEASE</thymeleaf.version>
@@ -1149,6 +1150,11 @@
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-jwt</artifactId>
 				<version>${spring-security-jwt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security.oauth</groupId>
+				<artifactId>spring-security-oauth2</artifactId>
+				<version>${spring-security-oauth2.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.social</groupId>
