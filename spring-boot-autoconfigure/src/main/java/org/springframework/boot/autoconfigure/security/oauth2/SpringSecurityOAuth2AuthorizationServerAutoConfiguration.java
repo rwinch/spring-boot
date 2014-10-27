@@ -100,6 +100,7 @@ public class SpringSecurityOAuth2AuthorizationServerAutoConfiguration {
 			System.out.println();
 			System.out.println(prefix + ".clientId=" + config.getClientId());
 			System.out.println(prefix + ".secret=" + config.getSecret());
+			System.out.println(prefix + ".resourceId=" + config.getResourceId());
 			System.out.println(prefix + ".authorizationTypes=" +
 					StringUtils.arrayToCommaDelimitedString(config.getAuthorizationTypes()));
 			System.out.println(prefix + ".scopes=" +

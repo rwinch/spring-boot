@@ -16,11 +16,15 @@
 
 package org.springframework.boot.autoconfigure.security.oauth2;
 
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.approval.DefaultUserApprovalHandler;
 import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
@@ -35,9 +39,12 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
  */
 @Configuration
 @ConditionalOnClass({ OAuth2AccessToken.class })
+@ConditionalOnWebApplication
 @Import({SpringSecurityOAuth2AuthorizationServerAutoConfiguration.class,
 		SpringSecurityOAuth2MethodSecurityAutoConfiguration.class,
 		SpringSecurityOAuth2ResourceServerAutoConfiguration.class})
+@AutoConfigureBefore(WebMvcAutoConfiguration.class)
+@EnableWebMvcSecurity
 public class SpringSecurityOAuth2AutoConfiguration {
 
 	@Bean

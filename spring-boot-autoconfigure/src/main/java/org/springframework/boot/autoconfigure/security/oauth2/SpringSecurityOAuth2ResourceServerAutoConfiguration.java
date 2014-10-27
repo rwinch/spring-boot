@@ -24,7 +24,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * Auto-configure a Spring Security OAuth2 resource server. Back off if another component already exists or
@@ -57,8 +56,7 @@ public class SpringSecurityOAuth2ResourceServerAutoConfiguration {
 				.and()
 					.httpBasic()
 				.and()
-					.csrf()
-						.requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/**")).disable();
+					.csrf().disable();
 		}
 
 	}
