@@ -23,13 +23,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.annotation.Jsr250MethodSecurityMetadataSource;
+import org.springframework.security.access.annotation.Jsr250Voter;
 import org.springframework.security.access.annotation.SecuredAnnotationSecurityMetadataSource;
 import org.springframework.security.access.expression.method.ExpressionBasedAnnotationAttributeFactory;
+import org.springframework.security.access.expression.method.ExpressionBasedPreInvocationAdvice;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource;
 import org.springframework.security.access.method.MethodSecurityMetadataSource;
+import org.springframework.security.access.prepost.PreInvocationAuthorizationAdviceVoter;
 import org.springframework.security.access.prepost.PrePostAnnotationSecurityMetadataSource;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.AuthenticatedVoter;
+import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -72,6 +80,23 @@ public class SpringSecurityOAuth2MethodSecurityAutoConfiguration {
 			}
 
 			return new DelegatingMethodSecurityMetadataSource(sources);
+		}
+
+		@Override
+		protected AccessDecisionManager accessDecisionManager() {
+			List<AccessDecisionVoter> decisionVoters = new ArrayList<AccessDecisionVoter>();
+			ExpressionBasedPreInvocationAdvice expressionAdvice = new ExpressionBasedPreInvocationAdvice();
+			expressionAdvice.setExpressionHandler(getExpressionHandler());
+			if(config.isPrePostEnabled()) {
+				decisionVoters.add(new PreInvocationAuthorizationAdviceVoter(
+					expressionAdvice));
+			}
+			if(config.isJsr250Enabled()) {
+				decisionVoters.add(new Jsr250Voter());
+			}
+			decisionVoters.add(new RoleVoter());
+			decisionVoters.add(new AuthenticatedVoter());
+			return new AffirmativeBased(decisionVoters);
 		}
 
 		@Override
