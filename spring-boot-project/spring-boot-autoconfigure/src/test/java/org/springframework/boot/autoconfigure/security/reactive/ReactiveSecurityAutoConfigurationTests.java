@@ -32,11 +32,11 @@ import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.config.annotation.web.reactive.HttpSecurityConfiguration;
 import org.springframework.security.config.annotation.web.reactive.WebFluxSecurityConfiguration;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.MapUserDetailsRepository;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsRepository;
-import org.springframework.security.web.server.WebFilterChainFilter;
+import org.springframework.security.web.server.WebFilterChainProxy;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 
@@ -62,7 +62,7 @@ public class ReactiveSecurityAutoConfigurationTests {
 							.isNotNull();
 					assertThat(context).getBean(WebFluxSecurityConfiguration.class)
 							.isNotNull();
-					assertThat(context).getBean(WebFilterChainFilter.class).isNotNull();
+					assertThat(context).getBean(WebFilterChainProxy.class).isNotNull();
 				});
 	}
 
@@ -72,26 +72,26 @@ public class ReactiveSecurityAutoConfigurationTests {
 				.withConfiguration(
 						AutoConfigurations.of(ReactiveSecurityAutoConfiguration.class))
 				.run((context) -> {
-					UserDetailsRepository userDetailsRepository = context
-							.getBean(UserDetailsRepository.class);
-					assertThat(userDetailsRepository.findByUsername("user").block())
+					ReactiveUserDetailsService reactiveUserDetailsService = context
+							.getBean(ReactiveUserDetailsService.class);
+					assertThat(reactiveUserDetailsService.findByUsername("user").block())
 							.isNotNull();
 				});
 	}
 
 	@Test
-	public void doesNotConfigureDefaultUserIfUserDetailsRepositoryAvailable() {
+	public void doesNotConfigureDefaultUserIfReactiveUserDetailsServiceAvailable() {
 		this.contextRunner.withUserConfiguration(UserConfig.class, TestConfig.class)
 				.withConfiguration(
 						AutoConfigurations.of(ReactiveSecurityAutoConfiguration.class))
 				.run((context) -> {
-					UserDetailsRepository userDetailsRepository = context
-							.getBean(UserDetailsRepository.class);
-					assertThat(userDetailsRepository.findByUsername("user").block())
+					ReactiveUserDetailsService reactiveUserDetailsService = context
+							.getBean(ReactiveUserDetailsService.class);
+					assertThat(reactiveUserDetailsService.findByUsername("user").block())
 							.isNull();
-					assertThat(userDetailsRepository.findByUsername("foo").block())
+					assertThat(reactiveUserDetailsService.findByUsername("foo").block())
 							.isNotNull();
-					assertThat(userDetailsRepository.findByUsername("admin").block())
+					assertThat(reactiveUserDetailsService.findByUsername("admin").block())
 							.isNotNull();
 				});
 	}
@@ -103,8 +103,8 @@ public class ReactiveSecurityAutoConfigurationTests {
 						TestConfig.class)
 				.withConfiguration(
 						AutoConfigurations.of(ReactiveSecurityAutoConfiguration.class))
-				.run((context) -> assertThat(context).getBean(UserDetailsRepository.class)
-						.isNull());
+				.run((context) -> assertThat(context)
+						.getBean(ReactiveUserDetailsService.class).isNull());
 	}
 
 	@Configuration
@@ -127,12 +127,12 @@ public class ReactiveSecurityAutoConfigurationTests {
 	static class UserConfig {
 
 		@Bean
-		public MapUserDetailsRepository userDetailsRepository() {
+		public MapReactiveUserDetailsService reactiveUserDetailsService() {
 			UserDetails foo = User.withUsername("foo").password("foo").roles("USER")
 					.build();
 			UserDetails admin = User.withUsername("admin").password("admin")
 					.roles("USER", "ADMIN").build();
-			return new MapUserDetailsRepository(foo, admin);
+			return new MapReactiveUserDetailsService(foo, admin);
 		}
 
 	}
